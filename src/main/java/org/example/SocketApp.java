@@ -13,14 +13,24 @@ public class SocketApp {
 
         try (ServerSocket serverSocket = new ServerSocket(port);
              Socket clientSocket = serverSocket.accept();
-             PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
-            System.out.println("New connection accepted");
+             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
 
-            String resp = reader.readLine();
+            out.println("Write your name:");
+            String name = in.readLine();
 
-            writer.printf("Hi %s, your port is %d", resp, clientSocket.getPort());
-        } catch (IOException e) {
+            out.println("Are you a child? (yes/no)");
+            String respond = in.readLine();
+
+            if (respond.equals("yes")) {
+                out.printf("Welcome to the kids area, %s! Let's play!\n", name);
+            } else if (respond.equals("no")) {
+                out.printf("Welcome to the adult zone, %s! Have a good rest, or a good working day!\n", name);
+            } else {
+                System.out.println("Incorrect answer");
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
